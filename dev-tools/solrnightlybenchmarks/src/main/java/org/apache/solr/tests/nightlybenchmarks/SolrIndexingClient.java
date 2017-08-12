@@ -33,14 +33,6 @@ import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.SolrInputDocument;
 
-enum SolrClientType {
-	HTTP_SOLR_CLIENT, CLOUD_SOLR_CLIENT, CONCURRENT_UPDATE_SOLR_CLIENT
-};
-
-enum ActionType {
-	INDEX, PARTIAL_UPDATE
-}
-
 /**
  * This class provides the implementation for indexing client.
  * @author Vivek Narang
@@ -93,31 +85,30 @@ public class SolrIndexingClient {
 	 * @throws Exception 
 	 */
 	@SuppressWarnings("deprecation")
-	public Map<String, String> indexData(long numDocuments, String urlString, String collectionName, int queueSize,
-			int threadCount, TestType type, boolean captureMetrics, boolean deleteData, SolrClientType clientType,
-			String zookeeperIp, String zookeeperPort, ActionType action) throws Exception {
+	public Map<String, String> indexData(BenchmarkConfiguration configuration, String urlString, String collectionName, int queueSize, boolean captureMetrics, boolean deleteData,
+			String zookeeperIp, String zookeeperPort) throws Exception {
 
-		documentCount = numDocuments;
+		documentCount = configuration.inputCount;
 		
-		logger.info("Indexing documents through " + clientType + " with following parameters: Document Count:"
-				+ numDocuments + ", Url:" + urlString + ", collectionName:" + collectionName + ", QueueSize:"
-				+ queueSize + ", Threadcount:" + threadCount + ", TestType:" + type + ", Capture Metrics: "
+		logger.info("Indexing documents through " + configuration.benchmarkClient + " with following parameters: Document Count:"
+				+ configuration.inputCount + ", Url:" + urlString + ", collectionName:" + collectionName + ", QueueSize:"
+				+ queueSize + ", Threadcount:" + configuration.threadCount + ", BenchmarkType:" + configuration.benchmarkType + ", Capture Metrics: "
 				+ captureMetrics + ", Delete Data:" + deleteData + ", Zookeeper IP:" + zookeeperIp + ", Zookeeper Port:"
-				+ zookeeperPort + ", Action Type:" + action);
+				+ zookeeperPort);
 
 		HttpSolrClient httpSolrClient = null;
 		CloudSolrClient cloudSolrClient = null;
 		ConcurrentUpdateSolrClient concurrentUpdateSolrClient = null;
 
-		if (clientType == SolrClientType.HTTP_SOLR_CLIENT) {
+		if (configuration.benchmarkClient.equals("HTTP_SOLR_CLIENT")) {
 			httpSolrClient = new HttpSolrClient.Builder(urlString).build();
-		} else if (clientType == SolrClientType.CLOUD_SOLR_CLIENT) {
+		} else if (configuration.benchmarkClient.equals("CLOUD_SOLR_CLIENT")) {
 			cloudSolrClient = new CloudSolrClient.Builder().withZkHost(zookeeperIp + ":" + zookeeperPort).build();
 			cloudSolrClient.connect();
 			cloudSolrClient.setDefaultCollection(collectionName);
-		} else if (clientType == SolrClientType.CONCURRENT_UPDATE_SOLR_CLIENT) {
+		} else if (configuration.benchmarkClient.equals("CONCURRENT_UPDATE_SOLR_CLIENT")) {
 			concurrentUpdateSolrClient = new ConcurrentUpdateSolrClient.Builder(urlString).withQueueSize(queueSize)
-					.withThreadCount(threadCount).build();
+					.withThreadCount(configuration.threadCount).build();
 		}
 
 		int numberOfDocuments = 0;
@@ -126,7 +117,7 @@ public class SolrIndexingClient {
 
 		Thread thread = null;
 		if (captureMetrics) {
-			thread = new Thread(new MetricCollector(this.commitId, type, this.port));
+			thread = new Thread(new MetricCollector(this.commitId, configuration, this.port));
 			thread.start();
 		}
 
@@ -142,7 +133,7 @@ public class SolrIndexingClient {
 
 				String[] data = line.split(cvsSplitBy);
 				
-				if (action == ActionType.INDEX) {
+				if (configuration.benchmarkSubType.equals("Index")) {
 
 					document.addField("id", data[0].replaceAll("[^\\sa-zA-Z0-9]", "").trim());
 					document.addField("Title_t", data[1].replaceAll("[^\\sa-zA-Z0-9]", "").trim());
@@ -155,7 +146,7 @@ public class SolrIndexingClient {
 					document.addField("Double1_d", Double.parseDouble(data[8].replaceAll("[^\\sa-zA-Z0-9]", "").trim()));
 					document.addField("Text_s", data[9].replaceAll("[^\\sa-zA-Z0-9]", "").trim());
 				
-				} else if (action == ActionType.PARTIAL_UPDATE) {
+				} else if (configuration.benchmarkSubType.equals("PartialUpdate")) {
 
 					document.addField("id", data[0].replaceAll("[^\\sa-zA-Z0-9]", "").trim());
 					Map<String,Object> fieldModifier = new HashMap<>(1);
@@ -164,16 +155,16 @@ public class SolrIndexingClient {
 					
 				}				
 				
-				if (clientType == SolrClientType.HTTP_SOLR_CLIENT) {
+				if (configuration.benchmarkClient.equals("HTTP_SOLR_CLIENT")) {
 					httpSolrClient.add(document);
-				} else if (clientType == SolrClientType.CLOUD_SOLR_CLIENT) {
+				} else if (configuration.benchmarkClient.equals("CLOUD_SOLR_CLIENT")) {
 					cloudSolrClient.add(collectionName, document);
-				} else if (clientType == SolrClientType.CONCURRENT_UPDATE_SOLR_CLIENT) {
+				} else if (configuration.benchmarkClient.equals("CONCURRENT_UPDATE_SOLR_CLIENT")) {
 					concurrentUpdateSolrClient.add(collectionName, document);
 				}
 
 				numberOfDocuments++;
-				if (numDocuments == numberOfDocuments) {
+				if (configuration.inputCount == numberOfDocuments) {
 					break;
 				}
 			}
@@ -181,24 +172,24 @@ public class SolrIndexingClient {
 
 			logger.info("Committing the documents ...");
 
-			if (clientType == SolrClientType.HTTP_SOLR_CLIENT) {
+			if (configuration.benchmarkClient.equals("HTTP_SOLR_CLIENT")) {
 				httpSolrClient.commit(collectionName);
-			} else if (clientType == SolrClientType.CLOUD_SOLR_CLIENT) {
+			} else if (configuration.benchmarkClient.equals("CLOUD_SOLR_CLIENT")) {
 				cloudSolrClient.commit(collectionName);
-			} else if (clientType == SolrClientType.CONCURRENT_UPDATE_SOLR_CLIENT) {
+			} else if (configuration.benchmarkClient.equals("CONCURRENT_UPDATE_SOLR_CLIENT")) {
 				concurrentUpdateSolrClient.commit(collectionName);
 			}
 
 			if (deleteData) {
 				logger.info("Deleting documents from index ...");
 
-				if (clientType == SolrClientType.HTTP_SOLR_CLIENT) {
+				if (configuration.benchmarkClient.equals("HTTP_SOLR_CLIENT")) {
 					httpSolrClient.deleteByQuery("*:*");
 					httpSolrClient.commit(collectionName);
-				} else if (clientType == SolrClientType.CLOUD_SOLR_CLIENT) {
+				} else if (configuration.benchmarkClient.equals("CLOUD_SOLR_CLIENT")) {
 					cloudSolrClient.deleteByQuery(collectionName, "*:*");
 					cloudSolrClient.commit(collectionName);
-				} else if (clientType == SolrClientType.CONCURRENT_UPDATE_SOLR_CLIENT) {
+				} else if (configuration.benchmarkClient.equals("CONCURRENT_UPDATE_SOLR_CLIENT")) {
 					concurrentUpdateSolrClient.deleteByQuery(collectionName, "*:*");
 					concurrentUpdateSolrClient.commit(collectionName);
 				}
@@ -208,11 +199,11 @@ public class SolrIndexingClient {
 
 			logger.info("Closing the Solr connection ...");
 
-			if (clientType == SolrClientType.HTTP_SOLR_CLIENT) {
+			if (configuration.benchmarkClient.equals("HTTP_SOLR_CLIENT")) {
 				httpSolrClient.close();
-			} else if (clientType == SolrClientType.CLOUD_SOLR_CLIENT) {
+			} else if (configuration.benchmarkClient.equals("CLOUD_SOLR_CLIENT")) {
 				cloudSolrClient.close();
-			} else if (clientType == SolrClientType.CONCURRENT_UPDATE_SOLR_CLIENT) {
+			} else if (configuration.benchmarkClient.equals("CONCURRENT_UPDATE_SOLR_CLIENT")) {
 				concurrentUpdateSolrClient.shutdownNow();
 				concurrentUpdateSolrClient.close();
 			}

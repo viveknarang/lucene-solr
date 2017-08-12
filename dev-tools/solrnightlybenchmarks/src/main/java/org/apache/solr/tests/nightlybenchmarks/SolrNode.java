@@ -244,7 +244,7 @@ public class SolrNode {
 	 * @throws Exception 
 	 */
 	@SuppressWarnings("deprecation")
-	public Map<String, String> createCollection(String coreName, String collectionName)
+	public Map<String, String> createCollection(BenchmarkConfiguration configuration, String coreName, String collectionName)
 			throws Exception {
 
 		long start;
@@ -252,7 +252,7 @@ public class SolrNode {
 		int returnVal;
 
 		Thread thread = new Thread(
-				new MetricCollector(this.commitId, TestType.STANDALONE_CREATE_COLLECTION, this.port));
+				new MetricCollector(this.commitId, configuration, this.port));
 		thread.start();
 
 		this.collectionName = collectionName;
@@ -290,10 +290,10 @@ public class SolrNode {
 	 * @throws Exception 
 	 */
 	@SuppressWarnings("deprecation")
-	public Map<String, String> createCollection(String collectionName, String configName, String shards,
-			String replicationFactor) throws Exception {
+	public Map<String, String> createCollection(BenchmarkConfiguration configuration, String collectionName, String configName, int shards,
+			int replicas) throws Exception {
 
-		Thread thread = new Thread(new MetricCollector(this.commitId, TestType.CLOUD_CREATE_COLLECTION, this.port));
+		Thread thread = new Thread(new MetricCollector(this.commitId, configuration, this.port));
 		thread.start();
 
 		this.collectionName = collectionName;
@@ -306,12 +306,12 @@ public class SolrNode {
 		if (configName != null) {
 			start = System.currentTimeMillis();
 			returnVal = Util.execute("./solr create_collection -collection " + collectionName + " -shards " + shards
-					+ " -n " + configName + " -replicationFactor " + replicationFactor + " -force", nodeDirectory);
+					+ " -n " + configName + " -replicationFactor " + replicas + " -force", nodeDirectory);
 			end = System.currentTimeMillis();
 		} else {
 			start = System.currentTimeMillis();
 			returnVal = Util.execute("./solr create_collection -collection " + collectionName + " -shards " + shards
-					+ " -replicationFactor " + replicationFactor + " -force", nodeDirectory);
+					+ " -replicationFactor " + replicas + " -force", nodeDirectory);
 			end = System.currentTimeMillis();
 		}
 

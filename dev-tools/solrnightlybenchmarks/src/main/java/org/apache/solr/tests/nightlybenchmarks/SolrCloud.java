@@ -36,8 +36,8 @@ public class SolrCloud {
 	public final static Logger logger = Logger.getLogger(SolrCloud.class);
 
 	public int solrNodes;
-	public String shards;
-	public String replicas;
+	public int shards;
+	public int replicas;
 	public String port;
 	public Zookeeper zookeeperNode;
 	public String zookeeperPort;
@@ -51,6 +51,7 @@ public class SolrCloud {
 	public String host;
 	public boolean createADefaultCollection;
 	public Map<String, String> returnMapCreateCollection;
+	public BenchmarkConfiguration configuration;
 
 	/**
 	 * Constructor.
@@ -64,19 +65,19 @@ public class SolrCloud {
 	 * @param creatADefaultCollection
 	 * @throws Exception 
 	 */
-	public SolrCloud(int solrNodes, String shards, String replicas, String commitId, String configName, String host,
-			boolean creatADefaultCollection) throws Exception {
+	public SolrCloud(BenchmarkConfiguration configuration, String configName, String host, boolean creatADefaultCollection) throws Exception {
 		super();
-		this.solrNodes = solrNodes;
-		this.shards = shards;
-		this.replicas = replicas;
-		this.commitId = commitId;
+		this.solrNodes = configuration.nodes;
+		this.shards = configuration.shards;
+		this.replicas = configuration.replicas;
+		this.commitId = configuration.commitID;
 		this.configName = configName;
 		this.host = host;
 		this.collectionName = "Collection_" + UUID.randomUUID();
 		this.createADefaultCollection = creatADefaultCollection;
 		nodes = new LinkedList<SolrNode>();
 		this.init();
+		this.configuration = configuration;
 	}
 
 	/**
@@ -105,7 +106,7 @@ public class SolrCloud {
 			}
 
 			if (this.createADefaultCollection) {
-				returnMapCreateCollection = nodes.get(0).createCollection(this.collectionName, this.configName,
+				returnMapCreateCollection = nodes.get(0).createCollection(configuration, this.collectionName, this.configName,
 						this.shards, this.replicas);
 			}
 
@@ -133,9 +134,9 @@ public class SolrCloud {
 	 * @param replicas
 	 * @throws Exception 
 	 */
-	public void createCollection(String collectionName, String configName, String shards, String replicas) throws Exception {
+	public void createCollection(String collectionName, String configName, int shards, int replicas) throws Exception {
 		try {
-			nodes.get(0).createCollection(collectionName, configName, shards, replicas);
+			nodes.get(0).createCollection(configuration, collectionName, configName, shards, replicas);
 		} catch (IOException | InterruptedException e) {
 			logger.error(e.getMessage());
 			throw new Exception(e.getMessage());
