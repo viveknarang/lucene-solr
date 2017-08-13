@@ -252,7 +252,7 @@ public class SolrNode {
 		int returnVal;
 
 		Thread thread = new Thread(
-				new MetricCollector(this.commitId, configuration, this.port));
+				new MetricCollector(configuration, this.port));
 		thread.start();
 
 		this.collectionName = collectionName;
@@ -293,7 +293,7 @@ public class SolrNode {
 	public Map<String, String> createCollection(BenchmarkConfiguration configuration, String collectionName, String configName, int shards,
 			int replicas) throws Exception {
 
-		Thread thread = new Thread(new MetricCollector(this.commitId, configuration, this.port));
+		Thread thread = new Thread(new MetricCollector(configuration, this.port));
 		thread.start();
 
 		this.collectionName = collectionName;

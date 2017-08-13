@@ -17,10 +17,19 @@ public class BenchmarkConfiguration {
 	/* If on cloud mode how many shards */
 	public int shards;
 	/* If on cloud mode how many replicas */
-	public int replicas;	
+	public int replicas;
 	/* What is the thread count */
 	public int threadCount;
 	/* What is the input/query count */
 	public int inputCount;
 
+	@Override
+	public String toString() {
+
+		String returnString = "{" + commitID + "_" + benchmarkType + "_" + benchmarkSubType + "_" + benchmarkOn + "_"
+				+ benchmarkClient + "_" + nodes + "_" + shards + "_" + replicas + "_" + threadCount + "_" + inputCount
+				+ "}";
+
+		return returnString;
+	}
 }

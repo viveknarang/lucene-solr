@@ -38,9 +38,8 @@ public class MetricCollector extends Thread {
 	public final static Logger logger = Logger.getLogger(BenchmarkAppConnector.class);
 	public static String metricsURL;
 
-	public String testType;
-	public String commitID;
 	public String port;
+	public BenchmarkConfiguration configuration;
 
 	/**
 	 * An enum defining metric types.
@@ -56,10 +55,9 @@ public class MetricCollector extends Thread {
 	 * @param testType
 	 * @param port
 	 */
-	public MetricCollector(String commitID, BenchmarkConfiguration configuration, String port) {
-		this.testType = configuration.benchmarkType;
-		this.commitID = commitID;
+	public MetricCollector(BenchmarkConfiguration configuration, String port) {
 		this.port = port;
+		this.configuration = configuration;
 	}
 
 	/**
@@ -78,8 +76,8 @@ public class MetricCollector extends Thread {
 				Date dNow = new Date();
 				SimpleDateFormat ft = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 				BenchmarkAppConnector.writeToWebAppDataFile(
-						Util.TEST_ID + "_" + this.commitID + "_" + MetricType.MEM_ESTIMATION + "_" + testType
-								+ "_dump.csv",
+						Util.TEST_ID + "_" + MetricType.MEM_ESTIMATION + "_" + configuration.toString()
+								+ ".csv",
 						ft.format(dNow) + ", " + Util.TEST_ID + ", "
 								+ (Double.parseDouble(
 										((JSONObject) ((JSONObject) jsonObject.get("metrics")).get("solr.jvm"))
@@ -87,8 +85,8 @@ public class MetricCollector extends Thread {
 										/ (1024 * 1024)),
 						false, FileType.MEMORY_HEAP_USED);
 				BenchmarkAppConnector.writeToWebAppDataFile(
-						Util.TEST_ID + "_" + this.commitID + "_" + MetricType.CPU_ESTIMATION + "_" + testType
-								+ "_dump.csv",
+						Util.TEST_ID + "_" + MetricType.CPU_ESTIMATION + "_" + configuration.toString()
+								+ ".csv",
 						ft.format(dNow) + ", " + Util.TEST_ID + ", "
 								+ (Double.parseDouble(
 										((JSONObject) ((JSONObject) jsonObject.get("metrics")).get("solr.jvm"))

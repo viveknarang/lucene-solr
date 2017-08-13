@@ -42,7 +42,7 @@ public class TestPlans {
 
 		logger.info("Executing the benchmark test plan ...");
 
-		Tests.indexingTestsStandalone(Util.COMMIT_ID, Util.TEST_WITH_NUMBER_OF_DOCUMENTS, ActionType.INDEX);
+/*		Tests.indexingTestsStandalone(Util.COMMIT_ID, Util.TEST_WITH_NUMBER_OF_DOCUMENTS, ActionType.INDEX);
 		Tests.createCollectionTestStandalone(Util.COMMIT_ID);
 		Tests.indexingTestsStandaloneConcurrent(Util.COMMIT_ID, Util.TEST_WITH_NUMBER_OF_DOCUMENTS, ActionType.INDEX);
 
@@ -69,7 +69,7 @@ public class TestPlans {
 
 		Tests.queryTestsCloud(Util.TEST_WITH_NUMBER_OF_DOCUMENTS, BenchmarkTestType.PROD_TEST,
 				Util.NUMBER_OF_QUERIES_TO_RUN);
-
+*/
 		logger.info("Executing the benchmark test plan [COMPLETE] ...");
 
 	}
@@ -83,7 +83,7 @@ public class TestPlans {
 
 		logger.info("Executing the benchmark sanity test plan: load " + load + " number of documents: "
 				+ (long) (Util.TEST_WITH_NUMBER_OF_DOCUMENTS * load));
-
+/*
 		Tests.indexingTestsStandalone(Util.COMMIT_ID, (long) (Util.TEST_WITH_NUMBER_OF_DOCUMENTS * load),
 				ActionType.INDEX);
 		Tests.createCollectionTestStandalone(Util.COMMIT_ID);
@@ -114,7 +114,7 @@ public class TestPlans {
 
 		Tests.queryTestsCloud((long) (Util.TEST_WITH_NUMBER_OF_DOCUMENTS * load), BenchmarkTestType.DEV_TEST,
 				(long) (Util.NUMBER_OF_QUERIES_TO_RUN * load));
-
+*/
 		logger.info("Executing the benchmark sanity test plan [COMPLETE] ...");
 
 	}

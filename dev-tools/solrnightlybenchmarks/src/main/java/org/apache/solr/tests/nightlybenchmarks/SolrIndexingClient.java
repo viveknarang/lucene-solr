@@ -117,7 +117,7 @@ public class SolrIndexingClient {
 
 		Thread thread = null;
 		if (captureMetrics) {
-			thread = new Thread(new MetricCollector(this.commitId, configuration, this.port));
+			thread = new Thread(new MetricCollector(configuration, this.port));
 			thread.start();
 		}
 
