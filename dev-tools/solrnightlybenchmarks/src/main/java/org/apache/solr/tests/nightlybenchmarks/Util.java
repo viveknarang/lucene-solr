@@ -22,6 +22,7 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -36,6 +37,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -45,9 +47,11 @@ import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.zip.ZipInputStream;
+
 import javax.ws.rs.core.MediaType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
@@ -56,15 +60,20 @@ import org.apache.solr.tests.nightlybenchmarks.BenchmarkAppConnector.FileType;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 
@@ -1636,4 +1645,83 @@ public class Util {
 		  }
 		  return result;
 	}
+	
+	public static List<BenchmarkConfiguration> getBenchmarkConfigurations() {
+		
+		List<BenchmarkConfiguration> configurations = new LinkedList<BenchmarkConfiguration>();
+
+        try {
+
+    		JSONParser jsonParser = new JSONParser();
+    		Object object;
+
+    		object = jsonParser.parse(new FileReader("BenchmarkConfigurations.json"));
+			JSONObject jsonObject = (JSONObject) object;
+
+			JSONArray benchmarkConfigurations = (JSONArray) jsonObject.get("BenchmarkConfigurations");
+
+			Iterator itr = benchmarkConfigurations.iterator();
+
+			while (itr.hasNext()) {
+
+				BenchmarkConfiguration configuration = new BenchmarkConfiguration();
+				
+				Object slide = itr.next();
+				JSONObject jsonObject2 = (JSONObject) slide;
+				JSONObject benchmarkConfigurationObj = (JSONObject) jsonObject2.get("BenchmarkConfiguration");
+				
+				if(benchmarkConfigurationObj.get("commitID") != null) {
+					configuration.commitID = (String)benchmarkConfigurationObj.get("commitID");
+				}
+				
+				if(benchmarkConfigurationObj.get("benchmarkType") != null) {
+					configuration.benchmarkType = (String)benchmarkConfigurationObj.get("benchmarkType");
+				}
+
+				if(benchmarkConfigurationObj.get("benchmarkSubType") != null) {
+					configuration.benchmarkSubType = (String)benchmarkConfigurationObj.get("benchmarkSubType");
+				}
+
+				if(benchmarkConfigurationObj.get("benchmarkOn") != null) {
+					configuration.benchmarkOn = (String)benchmarkConfigurationObj.get("benchmarkOn");
+				}
+
+				if(benchmarkConfigurationObj.get("benchmarkClient") != null) {
+					configuration.benchmarkClient = (String)benchmarkConfigurationObj.get("benchmarkClient");
+				}
+
+				if(benchmarkConfigurationObj.get("nodes") != null) {
+					configuration.nodes = (int)benchmarkConfigurationObj.get("nodes");
+				}
+
+				if(benchmarkConfigurationObj.get("shards") != null) {
+					configuration.shards = (int)benchmarkConfigurationObj.get("shards");
+				}
+
+				if(benchmarkConfigurationObj.get("replicas") != null) {
+					configuration.replicas = (int)benchmarkConfigurationObj.get("replicas");
+				}
+
+				if(benchmarkConfigurationObj.get("threadCount") != null) {
+					configuration.threadCount = (int)benchmarkConfigurationObj.get("threadCount");
+				}
+
+				if(benchmarkConfigurationObj.get("inputCount") != null) {
+					configuration.inputCount = (int)benchmarkConfigurationObj.get("inputCount");
+				}
+
+				configurations.add(configuration);
+			}
+            
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }		
+		
+		return null;
+	}
+	
 }
