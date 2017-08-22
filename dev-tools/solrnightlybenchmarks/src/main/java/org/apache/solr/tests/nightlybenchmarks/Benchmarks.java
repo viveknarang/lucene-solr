@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Benchmarks {
 	
-	public static List<BenchmarkConfiguration> configurations = new LinkedList<BenchmarkConfiguration>();
+	public static List<BenchmarkConfiguration> configurations = Util.getBenchmarkConfigurations();
 	public static List<BenchmarkResponse> responses = new LinkedList<BenchmarkResponse>();
 	
 	public static void runBenchmarks() {
