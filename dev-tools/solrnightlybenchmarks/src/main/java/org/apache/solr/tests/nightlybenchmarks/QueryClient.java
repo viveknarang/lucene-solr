@@ -182,7 +182,7 @@ public class QueryClient implements Runnable {
 						requestParams.remove("f.Int2_i.facet.range.gap");
 						requestParams.remove("json.facet");
 
-						requestParams.add("q", "Int1_i:" + queryQueue.poll());
+						requestParams.add("q", queryQueue.poll());
 
 						params = SolrParams.toSolrParams(requestParams);
 						response = this.fireQuery(collectionName, params);
