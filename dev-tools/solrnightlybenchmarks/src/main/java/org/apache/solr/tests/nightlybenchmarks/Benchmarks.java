@@ -54,9 +54,7 @@ public class Benchmarks {
 					}
 				}
 			}
-		
 		} catch (Exception e) {
-			
 		}
 	}
 }

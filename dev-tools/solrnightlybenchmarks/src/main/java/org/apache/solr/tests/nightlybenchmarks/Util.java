@@ -1092,7 +1092,11 @@ public class Util {
 		logger.info("--------------------------------------------------------------------");
 		
 		try {
+			
 			Util.getPropertyValues();
+			List<BenchmarkConfiguration> configurations = Util.getBenchmarkConfigurations();
+			System.out.println(configurations.toString());
+			System.exit(0);
 
 			if (new File(Util.DOWNLOAD_DIR + "git-repository/solr/package/").exists()) {
 				Util.execute("rm -r -f " + Util.DOWNLOAD_DIR + "git-repository/solr/package/", Util.DOWNLOAD_DIR);
@@ -1691,23 +1695,23 @@ public class Util {
 				}
 
 				if(benchmarkConfigurationObj.get("nodes") != null) {
-					configuration.nodes = (int)benchmarkConfigurationObj.get("nodes");
+					configuration.nodes = Integer.parseInt((String)benchmarkConfigurationObj.get("nodes"));
 				}
 
 				if(benchmarkConfigurationObj.get("shards") != null) {
-					configuration.shards = (int)benchmarkConfigurationObj.get("shards");
+					configuration.shards = Integer.parseInt((String)benchmarkConfigurationObj.get("shards"));
 				}
 
 				if(benchmarkConfigurationObj.get("replicas") != null) {
-					configuration.replicas = (int)benchmarkConfigurationObj.get("replicas");
+					configuration.replicas = Integer.parseInt((String)benchmarkConfigurationObj.get("replicas"));
 				}
 
 				if(benchmarkConfigurationObj.get("threadCount") != null) {
-					configuration.threadCount = (int)benchmarkConfigurationObj.get("threadCount");
+					configuration.threadCount = Integer.parseInt((String)benchmarkConfigurationObj.get("threadCount"));
 				}
 
 				if(benchmarkConfigurationObj.get("inputCount") != null) {
-					configuration.inputCount = (int)benchmarkConfigurationObj.get("inputCount");
+					configuration.inputCount = Integer.parseInt((String)benchmarkConfigurationObj.get("inputCount"));
 				}
 
 				configurations.add(configuration);
