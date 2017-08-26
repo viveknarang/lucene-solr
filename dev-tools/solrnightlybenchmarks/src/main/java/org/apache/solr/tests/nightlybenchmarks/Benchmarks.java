@@ -29,7 +29,7 @@ public class Benchmarks {
 					
 					} else if (configuration.benchmarkOn.equals("SolrCloudMode")) {
 						
-						SolrCloud cloud = new SolrCloud(configuration, null, "localhost", true);
+						SolrCloud cloud = new SolrCloud(configuration, null, true);
 						SolrIndexingClient client = new SolrIndexingClient("localhost", cloud.port, configuration.commitID);
 
 							responses.add(new BenchmarkResponse(client.indexData(configuration,

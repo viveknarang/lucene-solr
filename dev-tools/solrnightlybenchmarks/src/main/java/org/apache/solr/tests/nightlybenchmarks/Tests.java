@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ 
 
 package org.apache.solr.tests.nightlybenchmarks;
 
@@ -35,12 +35,12 @@ enum ConfigurationType {
 	STANDALONE, CLOUD
 }
 
-/**
+*//**
  * This class provides tests for Solr standalone and Solr cloud.
  * 
  * @author Vivek Narang
  *
- */
+ *//*
 public class Tests {
 	
 	public final static Logger logger = Logger.getLogger(Tests.class);
@@ -48,13 +48,13 @@ public class Tests {
 	public static SolrCloud cloud;
 	public static SolrNode node;
 
-	/**
+	*//**
 	 * A collection creating test on standalone mode.
 	 * 
 	 * @param commitID
 	 * @return boolean
 	 * @throws Exception 
-	 */
+	 *//*
 	public static boolean createCollectionTestStandalone(String commitID) throws Exception {
 
 		try {
@@ -73,14 +73,14 @@ public class Tests {
 		return true;
 	}
 
-	/**
+	*//**
 	 * A method for testing indexing of test data on the solr standalone mode.
 	 * 
 	 * @param commitID
 	 * @param numDocuments
 	 * @return boolean
 	 * @throws Exception 
-	 */
+	 *//*
 	public static boolean indexingTestsStandalone(String commitID, long numDocuments, ActionType action) throws Exception {
 
 		try {
@@ -119,7 +119,7 @@ public class Tests {
 		return true;
 	}
 
-	/**
+	*//**
 	 * A method for testing indexing of test data on the solr standalone mode
 	 * using concurrent client.
 	 * 
@@ -127,7 +127,7 @@ public class Tests {
 	 * @param numDocuments
 	 * @return boolean
 	 * @throws Exception 
-	 */
+	 *//*
 	public static boolean indexingTestsStandaloneConcurrent(String commitID, long numDocuments, ActionType action) throws Exception {
 
 		try {
@@ -220,7 +220,7 @@ public class Tests {
 		return true;
 	}
 
-	/**
+	*//**
 	 * A method for testing indexing throughput on solr cloud using serial
 	 * client.
 	 * 
@@ -231,7 +231,7 @@ public class Tests {
 	 * @param replicas
 	 * @return boolean
 	 * @throws Exception 
-	 */
+	 *//*
 	public static boolean indexingTestsCloudSerial(String commitID, long numDocuments, int nodes, String shards,
 			String replicas) throws Exception {
 
@@ -274,7 +274,7 @@ public class Tests {
 		return true;
 	}
 
-	/**
+	*//**
 	 * A method for testing indexing throughput on solr cloud using concurrent
 	 * update client.
 	 * 
@@ -285,7 +285,7 @@ public class Tests {
 	 * @param replicas
 	 * @return Map
 	 * @throws Exception 
-	 */
+	 *//*
 	public static boolean indexingTestsCloudConcurrent(String commitID, long numDocuments, int nodes, String shards,
 			String replicas) throws Exception {
 
@@ -415,7 +415,7 @@ public class Tests {
 		return true;
 	}
 
-	/**
+	*//**
 	 * A method for testing indexing throughput on solr cloud using a custom
 	 * concurrent indexing client.
 	 * 
@@ -426,7 +426,7 @@ public class Tests {
 	 * @param replicas
 	 * @return Map
 	 * @throws Exception 
-	 */
+	 *//*
 	public static boolean indexingTestsCloudConcurrentCustomClient(String commitID, long numDocuments, int nodes,
 			String shards, String replicas, TestPlans.BenchmarkTestType type) throws Exception {
 
@@ -540,7 +540,7 @@ public class Tests {
 		return true;
 	}
 
-	/**
+	*//**
 	 * A method used by the custom concurrent indexing client.
 	 * 
 	 * @param zookeeperURL
@@ -553,7 +553,7 @@ public class Tests {
 	 * @param captureMetrics
 	 * @return Map
 	 * @throws Exception 
-	 */
+	 *//*
 	@SuppressWarnings("deprecation")
 	private static Map<String, String> cloudConcurrentIndexing(String zookeeperURL, String collectionName,
 			int numberOfThreads, String commitId, TestType type, String port,
@@ -626,7 +626,7 @@ public class Tests {
 		}
 	}
 
-	/**
+	*//**
 	 * A method implementing the querying tests.
 	 * 
 	 * @param commitID
@@ -638,7 +638,7 @@ public class Tests {
 	 * @param collectionName
 	 * @return Map
 	 * @throws Exception 
-	 */
+	 *//*
 	private static Map<String, String> numericQueryTests(String commitID, QueryClient.QueryType queryType,
 			String numberOfThreads_, String baseURL,
 			String collectionName, QueryClientType queryClientType, String zookeeperURL, long numberOfQueriesToRun) throws Exception {
@@ -706,7 +706,7 @@ public class Tests {
 		}
 	}
 
-	/**
+	*//**
 	 * A method used to set up a solr cloud instance for testing on the cloud
 	 * mode.
 	 * 
@@ -718,7 +718,7 @@ public class Tests {
 	 * @param queueSize
 	 * @return String
 	 * @throws Exception 
-	 */
+	 *//*
 	private static String setUpCloudForFeatureTests(String commitID, long documentCount, int solrNodes, String shards,
 			String replicas, int queueSize) throws Exception {
 
@@ -734,7 +734,7 @@ public class Tests {
 		return cloud.port;
 	}
 
-	/**
+	*//**
 	 * A method used for setting up solr in standalone mode for testing on the
 	 * standalone mode.
 	 * 
@@ -742,7 +742,7 @@ public class Tests {
 	 * @param numDocuments
 	 * @return String
 	 * @throws Exception 
-	 */
+	 *//*
 	private static String setUpStandaloneNodeForFeatureTests(String commitID, long numDocuments) throws Exception {
 
 		logger.info("Setting up standalone node for feature tests ...");
@@ -767,20 +767,20 @@ public class Tests {
 		}
 	}
 
-	/**
+	*//**
 	 * A method used for shutting down the solr cloud instance.
 	 * @throws Exception 
-	 */
+	 *//*
 	private static void shutDownCloud() throws Exception {
 
 		logger.info("Shutting down cloud for feature tests ...");
 		cloud.shutdown();
 	}
 
-	/**
+	*//**
 	 * A method used for shutting down the solr standalone mode instance.
 	 * @throws Exception 
-	 */
+	 *//*
 	private static void shutDownStandalone() throws Exception {
 
 		logger.info("Shutting down standalone node for feature tests ...");
@@ -789,13 +789,13 @@ public class Tests {
 		node.cleanup();
 	}
 
-	/**
+	*//**
 	 * A method used for setting up various configuration to be tested on cloud
 	 * mode.
 	 * 
 	 * @param numDocuments
 	 * @throws Exception 
-	 */
+	 *//*
 	@SuppressWarnings("deprecation")
 	public static void queryTestsCloud(long numDocuments, TestPlans.BenchmarkTestType type, long numberOfQueriesToRun) throws Exception {
 
@@ -1424,13 +1424,13 @@ public class Tests {
 		logger.info("COMPLETING TEST: Query tests on cloud ...");
 	}
 
-	/**
+	*//**
 	 * A method used for setting up configurations to be tested on solr
 	 * standalone mode.
 	 * 
 	 * @param numDocuments
 	 * @throws Exception 
-	 */
+	 *//*
 	@SuppressWarnings("deprecation")
 	public static void queryTestsStandalone(long numDocuments, TestPlans.BenchmarkTestType type, long numberOfQueriesToRun) throws Exception {
 		
@@ -2042,4 +2042,4 @@ public class Tests {
 		
 		logger.info("COMPLETING TEST: Query tests on standalone node ...");
 	}
-}
+}*/

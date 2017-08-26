@@ -61,18 +61,16 @@ public class SolrCloud {
 	 * @param replicas
 	 * @param commitId
 	 * @param configName
-	 * @param host
 	 * @param creatADefaultCollection
 	 * @throws Exception 
 	 */
-	public SolrCloud(BenchmarkConfiguration configuration, String configName, String host, boolean creatADefaultCollection) throws Exception {
+	public SolrCloud(BenchmarkConfiguration configuration, String configName, boolean creatADefaultCollection) throws Exception {
 		super();
 		this.solrNodes = configuration.nodes;
 		this.shards = configuration.shards;
 		this.replicas = configuration.replicas;
 		this.commitId = configuration.commitID;
 		this.configName = configName;
-		this.host = host;
 		this.collectionName = "Collection_" + UUID.randomUUID();
 		this.createADefaultCollection = creatADefaultCollection;
 		nodes = new LinkedList<SolrNode>();

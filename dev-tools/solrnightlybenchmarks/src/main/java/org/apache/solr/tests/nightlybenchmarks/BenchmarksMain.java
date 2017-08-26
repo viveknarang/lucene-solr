@@ -1,14 +1,7 @@
 package org.apache.solr.tests.nightlybenchmarks;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.solr.client.solrj.impl.CloudSolrClient;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class BenchmarksMain {
@@ -17,7 +10,7 @@ public class BenchmarksMain {
 	public static void main(String[] args) throws IOException, ParseException {
 		// TODO Auto-generated method stub
 
-		SolrCloud solrCloud = new SolrCloud(NODES); // zookeeper 
+/*		SolrCloud solrCloud = new SolrCloud(NODES); // zookeeper 
 		StandaloneSolr standalone = new new StandaloneSolr(); // port
 		
 		String jsonConfig = FileUtils.readFileToString(new File("config.json"),"UTF-8");
@@ -76,6 +69,7 @@ public class BenchmarksMain {
 		// ---- QUERYING ----
 		solrCloud.close()
 		standalone.close();
+
 	}
 
 	static void index(SolrCloud solrCloud, String collectionName, int threads, String datasetFile, File outputCSV) {
@@ -91,5 +85,6 @@ public class BenchmarksMain {
 		HttpSolrClient hsc = new HttpSolrClient(standalone.getUrl());
 		
 	}
-
+*/
+	}
 }
