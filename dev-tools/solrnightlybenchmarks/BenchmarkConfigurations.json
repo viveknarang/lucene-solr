@@ -6,13 +6,9 @@
 	  
 	  	"commitID":"4b6f2e5ca781102ae4270b98245f8d658fd0ed3a",
 	  	"benchmarkType":"Indexing",
-	  	"benchmarkSubType":"test",
+	  	"benchmarkSubType":"Index",
 	  	"benchmarkOn":"SolrStandaloneMode",
 		"benchmarkClient":"HTTP_SOLR_CLIENT",
-		"nodes":"1",	 
-		"shards":"1",
-		"replicas":"1",
-		"threadCount":"1",
 		"inputCount":"10000"	 	
 	  }
 

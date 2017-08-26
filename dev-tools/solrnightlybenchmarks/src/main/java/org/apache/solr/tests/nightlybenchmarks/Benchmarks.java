@@ -18,18 +18,11 @@ public class Benchmarks {
 	
 			for(BenchmarkConfiguration configuration : configurations) {
 				
-				System.out.println(configuration.toString());
-
 				if (configuration.benchmarkType.equals("Indexing")) {
 					
 					if (configuration.benchmarkOn.equals("SolrStandaloneMode")) {
-						
-						System.out.println("0");
 
 						SolrNode node = new SolrNode(configuration.commitID, "", "", false);
-						
-						System.out.println("1");
-						
 						node.doAction(SolrNodeAction.NODE_START);
 						node.createCollection(configuration, "Core-" + UUID.randomUUID(), "Collection-" + UUID.randomUUID());
 						
