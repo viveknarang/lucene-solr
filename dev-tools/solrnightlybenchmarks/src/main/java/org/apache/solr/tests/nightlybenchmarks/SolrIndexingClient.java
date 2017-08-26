@@ -62,7 +62,6 @@ public class SolrIndexingClient {
 	 */
 	public SolrIndexingClient(String host, String port, String commitId) {
 		super();
-		this.host = host;
 		this.port = port;
 		this.commitId = commitId;
 	}
@@ -237,6 +236,7 @@ public class SolrIndexingClient {
 			throw new Exception(e.getMessage());
 		}
 		
+		logger.debug(returnMetricMap.toString());
 		logger.info("Indexing documents COMPLETE ...");
 		return returnMetricMap;
 	}

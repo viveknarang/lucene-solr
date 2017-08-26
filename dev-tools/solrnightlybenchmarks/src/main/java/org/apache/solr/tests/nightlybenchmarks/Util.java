@@ -1094,8 +1094,7 @@ public class Util {
 		try {
 			
 			Util.getPropertyValues();
-			List<BenchmarkConfiguration> configurations = Util.getBenchmarkConfigurations();
-			System.out.println(configurations.toString());
+			Benchmarks.runBenchmarks();
 			System.exit(0);
 
 			if (new File(Util.DOWNLOAD_DIR + "git-repository/solr/package/").exists()) {

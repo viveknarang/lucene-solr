@@ -2,23 +2,39 @@ package org.apache.solr.tests.nightlybenchmarks;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 public class Benchmarks {
 	
-	public static List<BenchmarkConfiguration> configurations = Util.getBenchmarkConfigurations();
+	public static List<BenchmarkConfiguration> configurations;
 	public static List<BenchmarkResponse> responses = new LinkedList<BenchmarkResponse>();
 	
 	public static void runBenchmarks() {
 		
+		configurations = Util.getBenchmarkConfigurations();
+		System.out.println(configurations.toString());
+		
 		try {
 	
 			for(BenchmarkConfiguration configuration : configurations) {
+				
+				System.out.println(configuration.toString());
 
 				if (configuration.benchmarkType.equals("Indexing")) {
+					
 					if (configuration.benchmarkOn.equals("SolrStandaloneMode")) {
-	
+						
+						System.out.println("0");
+
 						SolrNode node = new SolrNode(configuration.commitID, "", "", false);
+						
+						System.out.println("1");
+						
 						node.doAction(SolrNodeAction.NODE_START);
+						node.createCollection(configuration, "Core-" + UUID.randomUUID(), "Collection-" + UUID.randomUUID());
+						
+						Thread.sleep(5000);
+						
 						SolrIndexingClient client = new SolrIndexingClient("localhost", node.port, configuration.commitID);
 
 							responses.add(new BenchmarkResponse(client.indexData(configuration,
@@ -43,12 +59,7 @@ public class Benchmarks {
 						
 						
 						
-						
-						
 					} else if (configuration.benchmarkOn.equals("SolrCloudMode")) {
-						
-						
-						
 						
 						
 					}
