@@ -1753,7 +1753,6 @@ public class Util {
 				String replicationType = (String)benchmarkConfigurationObj.get("replication-type");
 				String dataSetFile = (String)benchmarkConfigurationObj.get("dataset-file");
 				
-				
 				JSONArray setups = (JSONArray) benchmarkConfigurationObj.get("setups");
 				Iterator itr2 = setups.iterator();
 
@@ -1782,7 +1781,6 @@ public class Util {
 							int maxThreads = Integer.parseInt((String)benchmarkConfigurationObj2.get("max-threads"));
 						}
 				}
-				
 				
 			}
         
