@@ -64,8 +64,9 @@ public class SolrCloud {
 	 * @param creatADefaultCollection
 	 * @throws Exception 
 	 */
-	public SolrCloud(BenchmarkConfiguration configuration, String configName, boolean creatADefaultCollection) throws Exception {
+	public SolrCloud(BenchmarkConfiguration configuration, String configName, boolean creatADefaultCollection, String host) throws Exception {
 		super();
+		this.host = host;
 		this.solrNodes = configuration.nodes;
 		this.shards = configuration.shards;
 		this.replicas = configuration.replicas;

@@ -62,6 +62,7 @@ public class SolrIndexingClient {
 	 */
 	public SolrIndexingClient(String host, String port, String commitId) {
 		super();
+		this.host = host;
 		this.port = port;
 		this.commitId = commitId;
 	}

@@ -9,7 +9,7 @@ public class Benchmarks {
 	public static List<BenchmarkConfiguration> configurations;
 	public static List<BenchmarkResponse> responses = new LinkedList<BenchmarkResponse>();
 	
-	public static void runBenchmarks() {
+	public static void runBenchmarks(String commitID) {
 		
 		configurations = Util.getBenchmarkConfigurations();
 		System.out.println(configurations.toString());
@@ -17,6 +17,8 @@ public class Benchmarks {
 		try {
 	
 			for(BenchmarkConfiguration configuration : configurations) {
+				
+				configuration.commitID = commitID;
 				
 				if (configuration.benchmarkType.equals("Indexing")) {
 					
@@ -38,11 +40,11 @@ public class Benchmarks {
 					
 					} else if (configuration.benchmarkOn.equals("SolrCloudMode")) {
 						
-						SolrCloud cloud = new SolrCloud(configuration, null, true);
+						SolrCloud cloud = new SolrCloud(configuration, null, true, "localhost");
 						SolrIndexingClient client = new SolrIndexingClient("localhost", cloud.port, configuration.commitID);
 
 							responses.add(new BenchmarkResponse(client.indexData(configuration,
-									cloud.getuRL(),	cloud.collectionName, 0, true, true, null, null)));
+									cloud.getuRL(),	cloud.collectionName, 100, true, true, cloud.zookeeperIp, cloud.zookeeperPort)));
 						
 						cloud.shutdown();
 						
@@ -57,7 +59,8 @@ public class Benchmarks {
 						
 					}
 				}
-			}
+
+				}
 		} catch (Exception e) {
 		}
 	}

@@ -1,17 +1,22 @@
 {
   "BenchmarkConfigurations": [ 
-  	
-  	{
-	  "BenchmarkConfiguration": {
-	  
-	  	"commitID":"4b6f2e5ca781102ae4270b98245f8d658fd0ed3a",
+  	  {
 	  	"benchmarkType":"Indexing",
 	  	"benchmarkSubType":"Index",
 	  	"benchmarkOn":"SolrStandaloneMode",
 		"benchmarkClient":"HTTP_SOLR_CLIENT",
 		"inputCount":"10000"	 	
-	  }
-
-    }
+	  },
+	  {
+	  	"benchmarkType":"Indexing",
+	  	"benchmarkSubType":"Index",
+	  	"benchmarkOn":"SolrCloudMode",
+		"benchmarkClient":"CLOUD_SOLR_CLIENT",
+		"nodes":"2",
+		"shards":"1",
+		"replicas":"2",
+		"threadCount":"1",
+		"inputCount":"10000"	 	
+	  }  
    ]
 }

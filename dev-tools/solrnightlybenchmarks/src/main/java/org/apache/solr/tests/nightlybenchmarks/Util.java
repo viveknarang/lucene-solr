@@ -1094,8 +1094,6 @@ public class Util {
 		try {
 			
 			Util.getPropertyValues();
-			Benchmarks.runBenchmarks();
-			System.exit(0);
 
 			if (new File(Util.DOWNLOAD_DIR + "git-repository/solr/package/").exists()) {
 				Util.execute("rm -r -f " + Util.DOWNLOAD_DIR + "git-repository/solr/package/", Util.DOWNLOAD_DIR);
@@ -1310,9 +1308,11 @@ public class Util {
 					Util.COMMIT_ID = Util.getLatestCommitID(Util.LUCENE_SOLR_REPOSITORY_URL);
 					logger.debug("The latest commit ID is: " + Util.COMMIT_ID);
 	
-					TestPlans.execute();
-					BenchmarkAppConnector.publishDataForWebApp();
-					BenchmarkReportData.reset();
+					Benchmarks.runBenchmarks(Util.COMMIT_ID);
+
+					//TestPlans.execute();
+					//BenchmarkAppConnector.publishDataForWebApp();
+					//BenchmarkReportData.reset();
 					if (new File(Util.DOWNLOAD_DIR + "git-repository/solr/package/").exists()) {
 						Util.execute("rm -r -f " + Util.DOWNLOAD_DIR + "git-repository/solr/package/", Util.DOWNLOAD_DIR);
 					}
@@ -1320,9 +1320,12 @@ public class Util {
 					Util.createIsRunningFile();
 					Util.COMMIT_ID = argsList.get(argsList.indexOf("--commit-id") + 1);
 					logger.debug(" Executing benchmarks with commit: " + Util.COMMIT_ID);
-					TestPlans.execute();
-					BenchmarkAppConnector.publishDataForWebApp();
-					BenchmarkReportData.reset();
+					
+					Benchmarks.runBenchmarks(Util.COMMIT_ID);
+
+					//TestPlans.execute();
+					//BenchmarkAppConnector.publishDataForWebApp();
+					//BenchmarkReportData.reset();
 					if (new File(Util.DOWNLOAD_DIR + "git-repository/solr/package/").exists()) {
 						Util.execute("rm -r -f " + Util.DOWNLOAD_DIR + "git-repository/solr/package/", Util.DOWNLOAD_DIR);
 					}
@@ -1670,13 +1673,8 @@ public class Util {
 				BenchmarkConfiguration configuration = new BenchmarkConfiguration();
 				
 				Object slide = itr.next();
-				JSONObject jsonObject2 = (JSONObject) slide;
-				JSONObject benchmarkConfigurationObj = (JSONObject) jsonObject2.get("BenchmarkConfiguration");
-				
-				if(benchmarkConfigurationObj.get("commitID") != null) {
-					configuration.commitID = (String)benchmarkConfigurationObj.get("commitID");
-				}
-				
+				JSONObject benchmarkConfigurationObj = (JSONObject) slide;
+			
 				if(benchmarkConfigurationObj.get("benchmarkType") != null) {
 					configuration.benchmarkType = (String)benchmarkConfigurationObj.get("benchmarkType");
 				}
@@ -1726,5 +1724,4 @@ public class Util {
 		
 		return configurations;
 	}
-	
 }
