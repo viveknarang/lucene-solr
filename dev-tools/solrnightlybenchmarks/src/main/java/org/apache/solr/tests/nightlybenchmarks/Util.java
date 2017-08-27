@@ -1094,6 +1094,9 @@ public class Util {
 		try {
 			
 			Util.getPropertyValues();
+			
+			getIBenchmarkConfigurations();
+			System.exit(0);
 
 			if (new File(Util.DOWNLOAD_DIR + "git-repository/solr/package/").exists()) {
 				Util.execute("rm -r -f " + Util.DOWNLOAD_DIR + "git-repository/solr/package/", Util.DOWNLOAD_DIR);
@@ -1714,6 +1717,116 @@ public class Util {
 				configurations.add(configuration);
 			}
             
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }		
+		
+		return configurations;
+	}
+	
+	public static List<BenchmarkConfiguration> getIBenchmarkConfigurations() {
+		
+		List<BenchmarkConfiguration> configurations = new LinkedList<BenchmarkConfiguration>();
+
+        try {
+
+    		JSONParser jsonParser = new JSONParser();
+    		Object object;
+
+    		object = jsonParser.parse(new FileReader("config.json"));
+			JSONObject jsonObject = (JSONObject) object;
+			
+			JSONArray indexBenchmark = (JSONArray) jsonObject.get("index-benchmarks");
+			Iterator itr = indexBenchmark.iterator();
+
+			while (itr.hasNext()) {
+				
+				Object slide = itr.next();
+				JSONObject benchmarkConfigurationObj = (JSONObject) slide;
+				
+				String name = (String)benchmarkConfigurationObj.get("name");
+				String description = (String)benchmarkConfigurationObj.get("description");
+				String replicationType = (String)benchmarkConfigurationObj.get("replication-type");
+				String dataSetFile = (String)benchmarkConfigurationObj.get("dataset-file");
+				
+				
+				JSONArray setups = (JSONArray) benchmarkConfigurationObj.get("setups");
+				Iterator itr2 = setups.iterator();
+
+				while (itr2.hasNext()) {
+					
+						Object slide2 = itr2.next();
+						JSONObject benchmarkConfigurationObj2 = (JSONObject) slide2;
+			
+						if(benchmarkConfigurationObj2.get("collection") != null) {
+							String collection = (String)benchmarkConfigurationObj2.get("collection");
+						}
+						
+						if(benchmarkConfigurationObj2.get("replicationFactor") != null) {
+							int replicationFactor = Integer.parseInt((String)benchmarkConfigurationObj2.get("replicationFactor"));
+						}
+						
+						if(benchmarkConfigurationObj2.get("shards") != null) {
+							int shards = Integer.parseInt((String)benchmarkConfigurationObj2.get("shards"));
+						}
+		
+						if(benchmarkConfigurationObj2.get("min-threads") != null) {
+							int minThreads = Integer.parseInt((String)benchmarkConfigurationObj2.get("min-threads"));
+						}
+		
+						if(benchmarkConfigurationObj2.get("max-threads") != null) {
+							int maxThreads = Integer.parseInt((String)benchmarkConfigurationObj2.get("max-threads"));
+						}
+				}
+				
+				
+			}
+        
+			JSONArray queryBenchmark = (JSONArray) jsonObject.get("query-benchmarks");
+			itr = queryBenchmark.iterator();
+
+			while (itr.hasNext()) {
+				
+				Object slide = itr.next();
+				JSONObject benchmarkConfigurationObj = (JSONObject) slide;
+			
+				if(benchmarkConfigurationObj.get("name") != null) {
+					String name = (String)benchmarkConfigurationObj.get("name");
+				}
+
+				if(benchmarkConfigurationObj.get("description") != null) {
+					String name = (String)benchmarkConfigurationObj.get("description");
+				}
+
+				if(benchmarkConfigurationObj.get("replication-type") != null) {
+					String name = (String)benchmarkConfigurationObj.get("replication-type");
+				}
+				
+				if(benchmarkConfigurationObj.get("collection/core") != null) {
+					String name = (String)benchmarkConfigurationObj.get("collection/core");
+				}
+				
+				if(benchmarkConfigurationObj.get("query-file") != null) {
+					String name = (String)benchmarkConfigurationObj.get("query-file");
+				}
+				
+				if(benchmarkConfigurationObj.get("client-type") != null) {
+					String name = (String)benchmarkConfigurationObj.get("client-type");
+				}
+				
+				if(benchmarkConfigurationObj.get("min-threads") != null) {
+					int name = Integer.parseInt((String)benchmarkConfigurationObj.get("min-threads"));
+				}
+				
+				if(benchmarkConfigurationObj.get("max-threads") != null) {
+					int name = Integer.parseInt((String)benchmarkConfigurationObj.get("max-threads"));
+				}
+			}
+        
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
