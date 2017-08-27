@@ -1731,6 +1731,10 @@ public class Util {
 	public static List<BenchmarkConfiguration> getIBenchmarkConfigurations() {
 		
 		List<BenchmarkConfiguration> configurations = new LinkedList<BenchmarkConfiguration>();
+		
+		BenchmarkNConfiguration configuration = new BenchmarkNConfiguration();
+		configuration.indexBenchmarks = new LinkedList<IndexBenchmark>();
+		configuration.queryBenchmarks = new LinkedList<QueryBenchmark>();
 
         try {
 
@@ -1745,84 +1749,99 @@ public class Util {
 
 			while (itr.hasNext()) {
 				
+				IndexBenchmark iBenchmark = new IndexBenchmark();
+				
 				Object slide = itr.next();
 				JSONObject benchmarkConfigurationObj = (JSONObject) slide;
 				
-				String name = (String)benchmarkConfigurationObj.get("name");
-				String description = (String)benchmarkConfigurationObj.get("description");
-				String replicationType = (String)benchmarkConfigurationObj.get("replication-type");
-				String dataSetFile = (String)benchmarkConfigurationObj.get("dataset-file");
+				iBenchmark.name = (String)benchmarkConfigurationObj.get("name");
+				iBenchmark.description = (String)benchmarkConfigurationObj.get("description");
+				iBenchmark.replicationType = (String)benchmarkConfigurationObj.get("replication-type");
+				iBenchmark.dataSetFile = (String)benchmarkConfigurationObj.get("dataset-file");
 				
 				JSONArray setups = (JSONArray) benchmarkConfigurationObj.get("setups");
 				Iterator itr2 = setups.iterator();
+				iBenchmark.setups = new LinkedList<Setup>();
 
 				while (itr2.hasNext()) {
+					
+						Setup setup = new Setup();
 					
 						Object slide2 = itr2.next();
 						JSONObject benchmarkConfigurationObj2 = (JSONObject) slide2;
 			
 						if(benchmarkConfigurationObj2.get("collection") != null) {
-							String collection = (String)benchmarkConfigurationObj2.get("collection");
+							setup.collection = (String)benchmarkConfigurationObj2.get("collection");
 						}
 						
 						if(benchmarkConfigurationObj2.get("replicationFactor") != null) {
-							int replicationFactor = Integer.parseInt((String)benchmarkConfigurationObj2.get("replicationFactor"));
+							setup.replicationFactor = Integer.parseInt((String)benchmarkConfigurationObj2.get("replicationFactor"));
 						}
 						
 						if(benchmarkConfigurationObj2.get("shards") != null) {
-							int shards = Integer.parseInt((String)benchmarkConfigurationObj2.get("shards"));
+							setup.shards = Integer.parseInt((String)benchmarkConfigurationObj2.get("shards"));
 						}
 		
 						if(benchmarkConfigurationObj2.get("min-threads") != null) {
-							int minThreads = Integer.parseInt((String)benchmarkConfigurationObj2.get("min-threads"));
+							setup.minThreads = Integer.parseInt((String)benchmarkConfigurationObj2.get("min-threads"));
 						}
 		
 						if(benchmarkConfigurationObj2.get("max-threads") != null) {
-							int maxThreads = Integer.parseInt((String)benchmarkConfigurationObj2.get("max-threads"));
+							setup.maxThreads = Integer.parseInt((String)benchmarkConfigurationObj2.get("max-threads"));
 						}
+						
+						iBenchmark.setups.add(setup);
 				}
-				
+
+				configuration.indexBenchmarks.add(iBenchmark);
+
 			}
+			
         
 			JSONArray queryBenchmark = (JSONArray) jsonObject.get("query-benchmarks");
 			itr = queryBenchmark.iterator();
 
 			while (itr.hasNext()) {
 				
+				QueryBenchmark queryBenchmarkO = new QueryBenchmark();
+				
 				Object slide = itr.next();
 				JSONObject benchmarkConfigurationObj = (JSONObject) slide;
 			
 				if(benchmarkConfigurationObj.get("name") != null) {
-					String name = (String)benchmarkConfigurationObj.get("name");
+					queryBenchmarkO.name = (String)benchmarkConfigurationObj.get("name");
 				}
 
 				if(benchmarkConfigurationObj.get("description") != null) {
-					String name = (String)benchmarkConfigurationObj.get("description");
+					queryBenchmarkO.description = (String)benchmarkConfigurationObj.get("description");
 				}
 
 				if(benchmarkConfigurationObj.get("replication-type") != null) {
-					String name = (String)benchmarkConfigurationObj.get("replication-type");
+					queryBenchmarkO.replicationType = (String)benchmarkConfigurationObj.get("replication-type");
 				}
 				
 				if(benchmarkConfigurationObj.get("collection/core") != null) {
-					String name = (String)benchmarkConfigurationObj.get("collection/core");
+					queryBenchmarkO.collectionCore = (String)benchmarkConfigurationObj.get("collection/core");
 				}
 				
 				if(benchmarkConfigurationObj.get("query-file") != null) {
-					String name = (String)benchmarkConfigurationObj.get("query-file");
+					queryBenchmarkO.queryFile = (String)benchmarkConfigurationObj.get("query-file");
 				}
 				
 				if(benchmarkConfigurationObj.get("client-type") != null) {
-					String name = (String)benchmarkConfigurationObj.get("client-type");
+					queryBenchmarkO.clientType = (String)benchmarkConfigurationObj.get("client-type");
 				}
 				
 				if(benchmarkConfigurationObj.get("min-threads") != null) {
-					int name = Integer.parseInt((String)benchmarkConfigurationObj.get("min-threads"));
+					queryBenchmarkO.minThreads = Integer.parseInt((String)benchmarkConfigurationObj.get("min-threads"));
 				}
 				
 				if(benchmarkConfigurationObj.get("max-threads") != null) {
-					int name = Integer.parseInt((String)benchmarkConfigurationObj.get("max-threads"));
+					queryBenchmarkO.maxThreads = Integer.parseInt((String)benchmarkConfigurationObj.get("max-threads"));
 				}
+				
+				configuration.queryBenchmarks.add(queryBenchmarkO);
+			
 			}
         
         } catch (FileNotFoundException e) {
