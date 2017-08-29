@@ -64,4 +64,44 @@ public class Benchmarks {
 		} catch (Exception e) {
 		}
 	}
+	
+	public static void runIBenchmarks(String commitID) {
+		
+		BenchmarkNConfiguration configurationM = Util.getIBenchmarkConfigurations();
+		
+		try {
+				List<IndexBenchmark> indexing = configurationM.indexBenchmarks;
+			
+				for (IndexBenchmark i : indexing) {
+				
+					BenchmarkConfiguration configuration = new BenchmarkConfiguration();
+					configuration.commitID = commitID;
+					
+					if (configuration.benchmarkType.equals("Indexing")) {
+						
+						if (configuration.benchmarkOn.equals("SolrStandaloneMode")) {
+	
+							SolrNode node = new SolrNode(configuration.commitID, "", "", false);
+							node.doAction(SolrNodeAction.NODE_START);
+							node.createCollection(configuration, "Core-" + UUID.randomUUID(), "Collection-" + UUID.randomUUID());
+							
+							Thread.sleep(5000);
+							
+							SolrIndexingClient client = new SolrIndexingClient("localhost", node.port, configuration.commitID);
+	
+								responses.add(new BenchmarkResponse(client.indexData(configuration,
+										node.getBaseUrl() + node.collectionName, null, 0, true, true, null, null)));
+							
+							node.doAction(SolrNodeAction.NODE_STOP);
+							node.cleanup();
+						
+						} 
+					}
+				
+				}
+
+		} catch (Exception e) {
+		}
+	}
+	
 }

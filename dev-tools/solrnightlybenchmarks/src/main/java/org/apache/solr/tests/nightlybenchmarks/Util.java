@@ -1095,7 +1095,18 @@ public class Util {
 			
 			Util.getPropertyValues();
 			
-			getIBenchmarkConfigurations();
+			BenchmarkNConfiguration configuration = getIBenchmarkConfigurations();
+			
+			System.out.println(configuration.indexBenchmarks.get(0).name);
+			System.out.println(configuration.indexBenchmarks.get(0).description);
+			System.out.println(configuration.indexBenchmarks.get(0).replicationType);
+			System.out.println(configuration.indexBenchmarks.get(0).dataSetFile);
+			System.out.println(configuration.indexBenchmarks.get(0).setups.get(0).collection);
+			System.out.println(configuration.indexBenchmarks.get(0).setups.get(0).replicationFactor);
+			System.out.println(configuration.indexBenchmarks.get(0).setups.get(0).shards);
+			System.out.println(configuration.indexBenchmarks.get(0).setups.get(0).minThreads);
+			System.out.println(configuration.indexBenchmarks.get(0).setups.get(0).maxThreads);
+			
 			System.exit(0);
 
 			if (new File(Util.DOWNLOAD_DIR + "git-repository/solr/package/").exists()) {
@@ -1728,9 +1739,7 @@ public class Util {
 		return configurations;
 	}
 	
-	public static List<BenchmarkConfiguration> getIBenchmarkConfigurations() {
-		
-		List<BenchmarkConfiguration> configurations = new LinkedList<BenchmarkConfiguration>();
+	public static BenchmarkNConfiguration getIBenchmarkConfigurations() {
 		
 		BenchmarkNConfiguration configuration = new BenchmarkNConfiguration();
 		configuration.indexBenchmarks = new LinkedList<IndexBenchmark>();
@@ -1852,6 +1861,6 @@ public class Util {
             e.printStackTrace();
         }		
 		
-		return configurations;
+		return configuration;
 	}
 }
