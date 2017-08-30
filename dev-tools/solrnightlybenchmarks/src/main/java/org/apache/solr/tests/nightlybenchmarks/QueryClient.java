@@ -45,13 +45,6 @@ import org.apache.solr.common.util.NamedList;
  */
 public class QueryClient implements Runnable {
 
-	/**
-	 * A enum defining the type of client to use for querying.
-	 */
-	public enum QueryClientType {
-		HTTP_SOLR_CLIENT, CLOUD_SOLR_CLIENT
-	}
-
 	public final static Logger logger = Logger.getLogger(QueryClient.class);
 	public static ConcurrentLinkedQueue<String> queryQueue = new ConcurrentLinkedQueue<String>();
 	public static boolean running;
@@ -93,7 +86,7 @@ public class QueryClient implements Runnable {
 	 * @param delayEstimationBySeconds
 	 */
 	public QueryClient(String urlString, String collectionName, long numberOfThreads, long delayEstimationBySeconds,
-			QueryClientType queryClientType, String zookeeperURL, CountDownLatch latch, String queryFileName) {
+			String queryClientType, String zookeeperURL, CountDownLatch latch) {
 
 		super();
 		this.urlString = urlString;
@@ -101,11 +94,10 @@ public class QueryClient implements Runnable {
 		this.numberOfThreads = numberOfThreads;
 		this.delayEstimationBySeconds = delayEstimationBySeconds;
 		this.latch = latch;
-		QueryClient.queryFileName = queryFileName;
 
-		if (queryClientType == QueryClientType.HTTP_SOLR_CLIENT) {
+		if (queryClientType.equals("HTTP_SOLR_CLIENT")) {
 			solrClient = new HttpSolrClient.Builder(urlString).build();
-		} else if (queryClientType == QueryClientType.CLOUD_SOLR_CLIENT) {
+		} else if (queryClientType.equals("CLOUD_SOLR_CLIENT")) {
 			solrClient = new CloudSolrClient.Builder().withZkHost(zookeeperURL).build();
 		}
 
@@ -120,12 +112,12 @@ public class QueryClient implements Runnable {
 	 */
 	public static void prepare() throws Exception {
 
-		logger.debug("Preparing Term Query queue ...");
+		logger.debug("Preparing Query queue ...");
 
 		queryQueue = new ConcurrentLinkedQueue<String>();
 
 		String line = "";
-		try (BufferedReader br = new BufferedReader(new FileReader(QueryClient.queryFileName))) {
+		try (BufferedReader br = new BufferedReader(new FileReader(Util.TEST_DATA_DIRECTORY + QueryClient.queryFileName))) {
 
 			while ((line = br.readLine()) != null) {
 				queryQueue.add(line.trim());
@@ -134,7 +126,7 @@ public class QueryClient implements Runnable {
 			logger.error(e.getMessage());
 			throw new Exception(e.getMessage());
 		}
-		logger.debug("Preparing Term Query queue [COMPLETE] ...");
+		logger.debug("Preparing Query queue [COMPLETE] ...");
 
 		logger.debug("Starting State:| " + queryQueue.size());
 	}

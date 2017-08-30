@@ -1839,9 +1839,15 @@ public class Util {
 				if(benchmarkConfigurationObj.get("max-threads") != null) {
 					queryBenchmarkO.maxThreads = Integer.parseInt((String)benchmarkConfigurationObj.get("max-threads"));
 				}
-				
+
+				queryBenchmarkO.dataSetFile = (String)benchmarkConfigurationObj.get("dataset-file");
+				queryBenchmarkO.inputCount = (String)benchmarkConfigurationObj.get("input-count");
+				queryBenchmarkO.benchmarkType = (String)benchmarkConfigurationObj.get("benchmarkType");
+				queryBenchmarkO.benchmarkSubType = (String)benchmarkConfigurationObj.get("benchmarkSubType");
+				queryBenchmarkO.outputFile = (String)benchmarkConfigurationObj.get("output-file");
+				queryBenchmarkO.numberOfQueries = Long.parseLong((String)benchmarkConfigurationObj.get("number-of-queries-to-run"));
+								
 				configuration.queryBenchmarks.add(queryBenchmarkO);
-			
 			}
         
         } catch (FileNotFoundException e) {

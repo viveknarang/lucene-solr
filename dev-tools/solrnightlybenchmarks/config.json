@@ -9,7 +9,7 @@
       "dataset-file": "en-wiki-data-2G-modified.csv",
       "client-type": "HTTP_SOLR_CLIENT",
       "input-count": "1000",
-      "output-file": "test-output.csv",
+      "output-file": "standalone-index-output.csv",
       "setups": [
         {
           "collection": "standalone",
@@ -24,11 +24,17 @@
   "query-benchmarks": [
     {
       "name": "TERM_NUMERIC_QUERY_CLOUD_2T",
-      "description": "some shit describing the benchmark",
-      "replication-type": "cloud or standalone",
-      "collection/core": "<name of the collection/core, that must've already been created during the indexing phase>",
-      "query-file": "name of file containing all the queries for this benchmark",
-      "client-type": "CUSC or CSC or HSC etc.",
+      "description": "Term Numeric Query",
+      "benchmarkType":"Querying",
+      "benchmarkSubType":"TERM_NUMERIC_QUERY",
+      "replication-type": "SolrStandaloneMode",
+      "collection/core": "query-collection",
+      "query-file": "Numeric-Terms.csv",
+      "client-type": "HTTP_SOLR_CLIENT",
+      "input-count": "1000",
+      "number-of-queries-to-run": "1000",
+      "dataset-file": "en-wiki-data-2G-modified.csv",
+      "output-file": "term-numeric-query-output.csv",
       "min-threads": "1",
       "max-threads": "8"
     } 

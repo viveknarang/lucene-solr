@@ -32,7 +32,8 @@ class IndexBenchmark {
 	public String toString() {
 		return "IndexBenchmark [name=" + name + ", description=" + description + ", replicationType=" + replicationType
 				+ ", dataSetFile=" + dataSetFile + ", clientType=" + clientType + ", inputCount=" + inputCount
-				+ ", benchmarkType=" + benchmarkType + ", setups=" + setups + "]";
+				+ ", benchmarkType=" + benchmarkType + ", benchmarkSubType=" + benchmarkSubType + ", outputFile="
+				+ outputFile + ", setups=" + setups + "]";
 	}
 }
 
@@ -44,13 +45,11 @@ class Setup {
 	public int minThreads;
 	public int maxThreads;
 	
-	
 	@Override
 	public String toString() {
 		return "Setup [collection=" + collection + ", replicationFactor=" + replicationFactor + ", shards=" + shards
 				+ ", minThreads=" + minThreads + ", maxThreads=" + maxThreads + "]";
 	}	
-	
 }
 
 class QueryBenchmark {
@@ -63,13 +62,19 @@ class QueryBenchmark {
 	public String clientType;
 	public int minThreads;
 	public int maxThreads;
-	
+	public String benchmarkType;
+	public String benchmarkSubType;
+	public String inputCount;
+	public String outputFile;
+	public String dataSetFile;
+	public long numberOfQueries;
 	
 	@Override
 	public String toString() {
 		return "QueryBenchmark [name=" + name + ", description=" + description + ", replicationType=" + replicationType
 				+ ", collectionCore=" + collectionCore + ", queryFile=" + queryFile + ", clientType=" + clientType
-				+ ", minThreads=" + minThreads + ", maxThreads=" + maxThreads + "]";
+				+ ", minThreads=" + minThreads + ", maxThreads=" + maxThreads + ", benchmarkType=" + benchmarkType
+				+ ", benchmarkSubType=" + benchmarkSubType + ", inputCount=" + inputCount + ", outputFile=" + outputFile
+				+ ", dataSetFile=" + dataSetFile + "]";
 	}
-	
 }
