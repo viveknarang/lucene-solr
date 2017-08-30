@@ -22,6 +22,8 @@ public class BenchmarkConfiguration {
 	public int threadCount;
 	/* What is the input/query count */
 	public int inputCount;
+	/* What is the input/query count */
+	public String fileName;
 
 	@Override
 	public String toString() {

@@ -1094,20 +1094,6 @@ public class Util {
 		try {
 			
 			Util.getPropertyValues();
-			
-			BenchmarkNConfiguration configuration = getIBenchmarkConfigurations();
-			
-			System.out.println(configuration.indexBenchmarks.get(0).name);
-			System.out.println(configuration.indexBenchmarks.get(0).description);
-			System.out.println(configuration.indexBenchmarks.get(0).replicationType);
-			System.out.println(configuration.indexBenchmarks.get(0).dataSetFile);
-			System.out.println(configuration.indexBenchmarks.get(0).setups.get(0).collection);
-			System.out.println(configuration.indexBenchmarks.get(0).setups.get(0).replicationFactor);
-			System.out.println(configuration.indexBenchmarks.get(0).setups.get(0).shards);
-			System.out.println(configuration.indexBenchmarks.get(0).setups.get(0).minThreads);
-			System.out.println(configuration.indexBenchmarks.get(0).setups.get(0).maxThreads);
-			
-			System.exit(0);
 
 			if (new File(Util.DOWNLOAD_DIR + "git-repository/solr/package/").exists()) {
 				Util.execute("rm -r -f " + Util.DOWNLOAD_DIR + "git-repository/solr/package/", Util.DOWNLOAD_DIR);
@@ -1322,7 +1308,7 @@ public class Util {
 					Util.COMMIT_ID = Util.getLatestCommitID(Util.LUCENE_SOLR_REPOSITORY_URL);
 					logger.debug("The latest commit ID is: " + Util.COMMIT_ID);
 	
-					Benchmarks.runBenchmarks(Util.COMMIT_ID);
+					Benchmarks.runIBenchmarks(Util.COMMIT_ID);
 
 					//TestPlans.execute();
 					//BenchmarkAppConnector.publishDataForWebApp();
@@ -1335,7 +1321,7 @@ public class Util {
 					Util.COMMIT_ID = argsList.get(argsList.indexOf("--commit-id") + 1);
 					logger.debug(" Executing benchmarks with commit: " + Util.COMMIT_ID);
 					
-					Benchmarks.runBenchmarks(Util.COMMIT_ID);
+					Benchmarks.runIBenchmarks(Util.COMMIT_ID);
 
 					//TestPlans.execute();
 					//BenchmarkAppConnector.publishDataForWebApp();
@@ -1767,7 +1753,12 @@ public class Util {
 				iBenchmark.description = (String)benchmarkConfigurationObj.get("description");
 				iBenchmark.replicationType = (String)benchmarkConfigurationObj.get("replication-type");
 				iBenchmark.dataSetFile = (String)benchmarkConfigurationObj.get("dataset-file");
-				
+				iBenchmark.clientType = (String)benchmarkConfigurationObj.get("client-type");
+				iBenchmark.inputCount = (String)benchmarkConfigurationObj.get("input-count");
+				iBenchmark.benchmarkType = (String)benchmarkConfigurationObj.get("benchmarkType");
+				iBenchmark.benchmarkSubType = (String)benchmarkConfigurationObj.get("benchmarkSubType");
+				iBenchmark.outputFile = (String)benchmarkConfigurationObj.get("output-file");
+								
 				JSONArray setups = (JSONArray) benchmarkConfigurationObj.get("setups");
 				Iterator itr2 = setups.iterator();
 				iBenchmark.setups = new LinkedList<Setup>();

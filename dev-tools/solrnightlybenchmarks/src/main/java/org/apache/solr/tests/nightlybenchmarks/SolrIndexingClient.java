@@ -124,7 +124,7 @@ public class SolrIndexingClient {
 		long end = 0;
 		long start = System.currentTimeMillis();
 
-		try (BufferedReader br = new BufferedReader(new FileReader(Util.TEST_DATA_DIRECTORY + Util.ONEM_TEST_DATA))) {
+		try (BufferedReader br = new BufferedReader(new FileReader(Util.TEST_DATA_DIRECTORY + configuration.fileName))) {
 
 			while ((line = br.readLine()) != null) {
 

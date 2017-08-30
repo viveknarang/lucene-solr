@@ -2,9 +2,14 @@
   "index-benchmarks": [
     {
       "name": "STANDALONE_INDEXING",
+      "benchmarkType":"Indexing",
+      "benchmarkSubType":"Index",
       "description": "Indexing on solr standalone mode",
-      "replication-type": "standalone",
+      "replication-type": "SolrStandaloneMode",
       "dataset-file": "en-wiki-data-2G-modified.csv",
+      "client-type": "HTTP_SOLR_CLIENT",
+      "input-count": "1000",
+      "output-file": "test-output.csv",
       "setups": [
         {
           "collection": "standalone",

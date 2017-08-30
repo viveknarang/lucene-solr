@@ -2,7 +2,10 @@ package org.apache.solr.tests.nightlybenchmarks;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+
+import org.apache.solr.tests.nightlybenchmarks.BenchmarkAppConnector.FileType;
 
 public class Benchmarks {
 	
@@ -67,15 +70,27 @@ public class Benchmarks {
 	
 	public static void runIBenchmarks(String commitID) {
 		
+		
 		BenchmarkNConfiguration configurationM = Util.getIBenchmarkConfigurations();
 		
+		System.out.println(configurationM.toString());		
+
 		try {
 				List<IndexBenchmark> indexing = configurationM.indexBenchmarks;
 			
 				for (IndexBenchmark i : indexing) {
 				
 					BenchmarkConfiguration configuration = new BenchmarkConfiguration();
+					
+					configuration.benchmarkClient = i.clientType;
+					configuration.benchmarkOn = i.replicationType;
+					configuration.inputCount = Integer.parseInt(i.inputCount);
 					configuration.commitID = commitID;
+					configuration.benchmarkType = i.benchmarkType;
+					configuration.benchmarkSubType = i.benchmarkSubType;
+					configuration.fileName = i.dataSetFile;
+					
+					System.out.println(configuration.toString());
 					
 					if (configuration.benchmarkType.equals("Indexing")) {
 						
@@ -88,20 +103,19 @@ public class Benchmarks {
 							Thread.sleep(5000);
 							
 							SolrIndexingClient client = new SolrIndexingClient("localhost", node.port, configuration.commitID);
-	
-								responses.add(new BenchmarkResponse(client.indexData(configuration,
-										node.getBaseUrl() + node.collectionName, null, 0, true, true, null, null)));
+							Map<String, String> output = client.indexData(configuration, node.getBaseUrl() + node.collectionName, null, 0, true, true, null, null);
+
+							BenchmarkAppConnector.writeToWebAppDataFile(i.outputFile, output.toString(), false, FileType.GENERIC);
+							
+							responses.add(new BenchmarkResponse(output));
 							
 							node.doAction(SolrNodeAction.NODE_STOP);
 							node.cleanup();
 						
 						} 
 					}
-				
 				}
-
 		} catch (Exception e) {
 		}
 	}
-	
 }
